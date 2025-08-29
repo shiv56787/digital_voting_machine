@@ -1,0 +1,58 @@
+`timescale 1ns/1ps
+module tb_digital_voting_machine;
+  reg clk;
+  reg yug, shaad, sharique, yashraj;
+  reg submit, reset;
+  wire [6:0] dispyug, dispshaad, dispsharique, dispyashraj;
+  wire errorled;
+  digital_voting_machine dut (
+    .clk(clk),
+    .yug(yug),
+    .shaad(shaad),
+    .sharique(sharique),
+    .yashraj(yashraj),
+    .submit(submit),
+    .reset(reset),
+    .dispyug(dispyug),
+    .dispshaad(dispshaad),
+    .dispsharique(dispsharique),
+    .dispyashraj(dispyashraj),
+    .errorled(errorled)
+  );
+  initial begin
+    $dumpfile("waveform.vcd");
+    $dumpvars(0,tb_digital_voting_machine);
+  end
+  always #5 clk = ~clk;
+  initial begin 
+    clk = 0; reset = 1; submit = 0; yug = 0; shaad = 0; sharique = 0; yashraj = 0;
+    #10 reset = 0;
+    
+    
+    #10 yug = 1; submit = 1;
+    #10 submit = 0; yug = 0;
+    
+    #20 shaad = 1; submit = 1;
+    #10 submit = 0; shaad = 0;
+    
+    #20 sharique = 1; submit = 1;
+    #10 submit = 0; sharique = 0;
+    
+    #20 yashraj = 1; submit = 1;
+    #10 submit  = 0; yashraj = 0;
+    
+    #20 yug = 1; shaad = 1; submit = 1;
+    #10 submit = 0; shaad = 0; yug = 0;
+    
+    #20 yug = 1; submit = 1;
+    #10 submit = 0; yug = 0;
+    
+    #20 reset = 1;
+    #10 reset = 0;
+
+    
+    #50 $stop;
+  end
+
+endmodule
+  
